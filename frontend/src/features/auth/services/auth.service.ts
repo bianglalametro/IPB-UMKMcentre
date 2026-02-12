@@ -17,11 +17,11 @@
  * 5. Type Safety: Centralized type definitions and validation
  */
 
-import { http } from '../../infrastructure/http/http-client';
-import { API_ENDPOINTS } from '../../core/constants/index';
-import { User } from '../../core/types/domain.types';
-import { UserRole } from '../../core/constants/enums';
-import { setToken, setUser } from '../../infrastructure/auth/token.utils';
+import { http } from '../../../infrastructure/http/http-client';
+import { API_ENDPOINTS } from '../../../core/constants/index';
+import { User } from '../../../core/types/domain.types';
+import { UserRole } from '../../../core/constants/enums';
+import { setToken, setUser } from '../../../infrastructure/auth/token.utils';
 
 /**
  * Login Request DTO
