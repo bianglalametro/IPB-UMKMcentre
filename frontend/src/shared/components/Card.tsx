@@ -13,6 +13,7 @@ interface CardProps {
   hover?: boolean;
   gradient?: boolean;
   glass?: boolean;
+  style?: React.CSSProperties;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -22,6 +23,7 @@ export const Card: React.FC<CardProps> = ({
   hover = false,
   gradient = false,
   glass = false,
+  style,
 }) => {
   const hoverStyle = hover 
     ? 'hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer' 
@@ -36,6 +38,7 @@ export const Card: React.FC<CardProps> = ({
     <div
       className={`rounded-xl shadow-card p-6 ${hoverStyle} ${clickable} ${gradientStyle} ${glassStyle} ${className}`}
       onClick={onClick}
+      style={style}
     >
       {children}
     </div>
