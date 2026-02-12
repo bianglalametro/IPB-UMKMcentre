@@ -24,7 +24,9 @@ from src.interface.api.v1.schemas import (
     UserRegisterRequest,
     UserLoginRequest,
     TokenResponse,
-    UserResponse
+    UserResponse,
+    AuthResponse,
+    MessageResponse
 )
 from src.interface.api.v1.dependencies import (
     get_auth_service,
@@ -34,7 +36,7 @@ from src.interface.api.v1.dependencies import (
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
 async def register_user(
     request: UserRegisterRequest,
     auth_service: Annotated[AuthenticationService, Depends(get_auth_service)]
@@ -43,6 +45,7 @@ async def register_user(
     Register a new user
     
     Creates a new user account with the specified role.
+    Returns both user data and authentication token.
     
     THIN CONTROLLER:
     - Validates request (Pydantic)
@@ -64,16 +67,23 @@ async def register_user(
             phone=request.phone
         )
         
-        # Return response
-        return UserResponse(
-            id=user.id,
-            email=user.email,
-            username=user.username,
-            full_name=user.full_name,
-            role=user.role.value,
-            phone=user.phone,
-            is_active=user.is_active,
-            created_at=user.created_at
+        # Create access token for the new user
+        token = await auth_service.create_access_token(user)
+        
+        # Return response with both user and token
+        return AuthResponse(
+            access_token=token,
+            token_type="bearer",
+            user=UserResponse(
+                id=user.id,
+                email=user.email,
+                username=user.username,
+                full_name=user.full_name,
+                role=user.role.value,
+                phone=user.phone,
+                is_active=user.is_active,
+                created_at=user.created_at
+            )
         )
     
     except ValueError as e:
@@ -83,7 +93,7 @@ async def register_user(
         )
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login", response_model=AuthResponse)
 async def login(
     request: UserLoginRequest,
     auth_service: Annotated[AuthenticationService, Depends(get_auth_service)]
@@ -91,12 +101,12 @@ async def login(
     """
     Login with email and password
     
-    Returns a JWT access token on successful authentication.
+    Returns a JWT access token and user data on successful authentication.
     
     THIN CONTROLLER:
     - Receives credentials
     - Calls authentication service
-    - Returns token
+    - Returns token and user data
     - No authentication logic here!
     """
     # Call application service
@@ -115,9 +125,19 @@ async def login(
     # Create token
     token = await auth_service.create_access_token(user)
     
-    return TokenResponse(
+    return AuthResponse(
         access_token=token,
-        token_type="bearer"
+        token_type="bearer",
+        user=UserResponse(
+            id=user.id,
+            email=user.email,
+            username=user.username,
+            full_name=user.full_name,
+            role=user.role.value,
+            phone=user.phone,
+            is_active=user.is_active,
+            created_at=user.created_at
+        )
     )
 
 
@@ -144,4 +164,25 @@ async def get_current_user_info(
         phone=current_user.phone,
         is_active=current_user.is_active,
         created_at=current_user.created_at
+    )
+
+
+@router.post("/logout", response_model=MessageResponse)
+async def logout(
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    """
+    Logout current user
+    
+    In a stateless JWT setup, actual logout is handled client-side
+    by removing the token. This endpoint exists for compatibility
+    and can be extended for token blacklisting if needed.
+    
+    THIN CONTROLLER:
+    - Verifies user is authenticated
+    - Returns success message
+    - Client should clear token
+    """
+    return MessageResponse(
+        message="Logged out successfully"
     )

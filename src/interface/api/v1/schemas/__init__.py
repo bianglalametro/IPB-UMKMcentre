@@ -66,6 +66,13 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
+class AuthResponse(BaseModel):
+    """Response schema for login/register - includes both token and user"""
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
+
+
 # ============================================================================
 # UMKM Schemas
 # ============================================================================

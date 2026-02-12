@@ -287,3 +287,50 @@ async def cancel_order(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
+
+
+@router.post("/{order_id}/confirm", response_model=OrderResponse)
+async def confirm_order(
+    order_id: UUID,
+    current_user: Annotated[User, Depends(get_current_seller)],
+    order_service: Annotated[OrderService, Depends(get_order_service)]
+):
+    """
+    Confirm order (seller only)
+    
+    Changes order status from 'pending' to 'confirmed'.
+    This is a convenience endpoint for the frontend.
+    """
+    try:
+        order = await order_service.update_order_status(
+            order_id=order_id,
+            seller_id=current_user.id,
+            new_status="confirmed"
+        )
+        
+        return OrderResponse(
+            id=order.id,
+            buyer_id=order.buyer_id,
+            umkm_id=order.umkm_id,
+            status=order.status.value,
+            total_amount=order.total_amount,
+            pickup_time=order.pickup_time,
+            notes=order.notes,
+            created_at=order.created_at,
+            items=[
+                {
+                    "product_id": str(item.product_id),
+                    "product_name": item.product_name,
+                    "quantity": item.quantity,
+                    "unit_price": item.unit_price,
+                    "subtotal": item.subtotal()
+                }
+                for item in order.items
+            ]
+        )
+    
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
