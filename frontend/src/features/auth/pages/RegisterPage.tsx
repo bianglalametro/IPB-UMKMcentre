@@ -16,13 +16,20 @@ export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const setUser = useAuthStore((state) => state.setUser);
   
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    email: string;
+    username: string;
+    password: string;
+    full_name: string;
+    phone: string;
+    role: UserRole;
+  }>({
     email: '',
     username: '',
     password: '',
     full_name: '',
     phone: '',
-    role: 'buyer' as string,
+    role: UserRole.BUYER,
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -40,10 +47,7 @@ export const RegisterPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await AuthService.register({
-        ...formData,
-        role: formData.role as UserRole
-      });
+      const response = await AuthService.register(formData);
       setUser(response.user);
       navigate(ROUTES.HOME);
     } catch (err: any) {
@@ -147,7 +151,7 @@ export const RegisterPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-3">
                 <label 
                   className={`flex items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                    formData.role === 'buyer' 
+                    formData.role === UserRole.BUYER 
                       ? 'border-primary-600 bg-primary-50 text-primary-700' 
                       : 'border-gray-300 hover:border-primary-300'
                   }`}
@@ -156,7 +160,7 @@ export const RegisterPage: React.FC = () => {
                     type="radio"
                     name="role"
                     value={UserRole.BUYER}
-                    checked={formData.role === 'buyer'}
+                    checked={formData.role === UserRole.BUYER}
                     onChange={handleChange}
                     className="sr-only"
                   />
@@ -167,7 +171,7 @@ export const RegisterPage: React.FC = () => {
                 </label>
                 <label 
                   className={`flex items-center justify-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                    formData.role === 'seller' 
+                    formData.role === UserRole.SELLER 
                       ? 'border-primary-600 bg-primary-50 text-primary-700' 
                       : 'border-gray-300 hover:border-primary-300'
                   }`}
@@ -176,7 +180,7 @@ export const RegisterPage: React.FC = () => {
                     type="radio"
                     name="role"
                     value={UserRole.SELLER}
-                    checked={formData.role === 'seller'}
+                    checked={formData.role === UserRole.SELLER}
                     onChange={handleChange}
                     className="sr-only"
                   />
