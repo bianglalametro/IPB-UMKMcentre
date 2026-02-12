@@ -9,6 +9,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from src.application.services.product_service import ProductService
+from src.application.services.review_service import ReviewService
 from src.domain.entities import User, ProductCategory
 from src.interface.api.v1.schemas import (
     ProductCreateRequest,
@@ -17,11 +18,13 @@ from src.interface.api.v1.schemas import (
     ProductStockUpdateRequest,
     ProductAvailabilityRequest,
     ProductResponse,
-    MessageResponse
+    MessageResponse,
+    ReviewResponse
 )
 from src.interface.api.v1.dependencies import (
     get_product_service,
-    get_current_seller
+    get_current_seller,
+    get_review_service
 )
 
 router = APIRouter(prefix="/products", tags=["Products"])
@@ -354,3 +357,42 @@ async def delete_product(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
+
+
+@router.get("/{product_id}/reviews", response_model=List[ReviewResponse])
+async def get_product_reviews(
+    product_id: UUID,
+    review_service: Annotated[ReviewService, Depends(get_review_service)],
+    product_service: Annotated[ProductService, Depends(get_product_service)]
+):
+    """
+    Get all reviews for a product
+    
+    This endpoint retrieves reviews through the product's UMKM.
+    Public endpoint - shows only visible reviews.
+    """
+    # Get product to find its UMKM
+    product = await product_service.get_product(product_id)
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    
+    # Get reviews for the UMKM
+    reviews = await review_service.get_umkm_reviews(product.umkm_id, visible_only=True)
+    
+    return [
+        ReviewResponse(
+            id=review.id,
+            user_id=review.user_id,
+            umkm_id=review.umkm_id,
+            order_id=review.order_id,
+            rating=review.rating,
+            comment=review.comment,
+            is_visible=review.is_visible,
+            is_flagged=review.is_flagged,
+            created_at=review.created_at
+        )
+        for review in reviews
+    ]
