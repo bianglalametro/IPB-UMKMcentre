@@ -1,7 +1,7 @@
 /**
  * Card Component - Shared UI
  * 
- * Reusable card component for consistent styling.
+ * Reusable card component with beautiful modern styling.
  */
 
 import React from 'react';
@@ -11,6 +11,8 @@ interface CardProps {
   className?: string;
   onClick?: () => void;
   hover?: boolean;
+  gradient?: boolean;
+  glass?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -18,13 +20,21 @@ export const Card: React.FC<CardProps> = ({
   className = '',
   onClick,
   hover = false,
+  gradient = false,
+  glass = false,
 }) => {
-  const hoverStyle = hover ? 'hover:shadow-lg transition-shadow cursor-pointer' : '';
+  const hoverStyle = hover 
+    ? 'hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer' 
+    : 'transition-all duration-300';
   const clickable = onClick ? 'cursor-pointer' : '';
+  const gradientStyle = gradient 
+    ? 'bg-gradient-to-br from-primary-50 to-white border border-primary-100' 
+    : 'bg-white border border-gray-100';
+  const glassStyle = glass ? 'glass' : '';
   
   return (
     <div
-      className={`bg-white rounded-lg shadow-md p-6 ${hoverStyle} ${clickable} ${className}`}
+      className={`rounded-xl shadow-card p-6 ${hoverStyle} ${clickable} ${gradientStyle} ${glassStyle} ${className}`}
       onClick={onClick}
     >
       {children}
