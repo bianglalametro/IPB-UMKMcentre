@@ -8,8 +8,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth.store';
-import { Card, Button } from '../../../shared/components';
-import { ROUTES } from '../../../core/constants';
+import { Card, Button } from '../../../shared/components/index';
+import { ROUTES } from '../../../core/constants/index';
 
 export const AdminDashboard: React.FC = () => {
   const user = useAuthStore((state) => state.user);

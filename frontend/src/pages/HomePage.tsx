@@ -6,8 +6,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../core/constants';
-import { Button } from '../shared/components';
+import { ROUTES } from '../core/constants/index';
+import { Button } from '../shared/components/index';
 
 export const HomePage: React.FC = () => {
   return (

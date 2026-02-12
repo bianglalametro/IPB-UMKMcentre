@@ -5,7 +5,7 @@
  */
 
 import { http } from '../../../infrastructure/http/http-client';
-import { API_ENDPOINTS } from '../../../core/constants';
+import { API_ENDPOINTS } from '../../../core/constants/index';
 import { Order, PaginatedResponse } from '../../../core/types/domain.types';
 import { FilterParams } from '../../../core/types/common.types';
 

@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../../../store/auth.store';
 import { AuthService } from '../services/auth.service';
-import { Button, Input, Card } from '../../../shared/components';
-import { ROUTES } from '../../../core/constants';
+import { Button, Input, Card } from '../../../shared/components/index';
+import { ROUTES } from '../../../core/constants/index';
 import { UserRole } from '../../../core/constants/enums';
 
 export const RegisterPage: React.FC = () => {

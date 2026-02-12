@@ -8,7 +8,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store';
 import { useCartStore } from '../../store/cart.store';
-import { ROUTES } from '../../core/constants';
+import { ROUTES } from '../../core/constants/index';
 import { UserRole } from '../../core/constants/enums';
 
 export const Header: React.FC = () => {

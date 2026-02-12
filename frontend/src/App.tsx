@@ -21,7 +21,7 @@
  */
 
 import { useEffect } from 'react';
-import { AppRoutes } from './routes';
+import { AppRoutes } from './routes/index';
 import { useAuthStore } from './store/auth.store';
 
 function App() {

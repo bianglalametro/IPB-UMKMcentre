@@ -9,8 +9,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProductService } from '../services/product.service';
 import { Product } from '../../../core/types/domain.types';
-import { Card, Loading, Button } from '../../../shared/components';
-import { ROUTES } from '../../../core/constants';
+import { Card, Loading, Button } from '../../../shared/components/index';
+import { ROUTES } from '../../../core/constants/index';
 
 export const ProductsPage: React.FC = () => {
   const navigate = useNavigate();

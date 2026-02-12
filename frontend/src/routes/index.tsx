@@ -18,9 +18,9 @@
 
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { MainLayout } from '../shared/layouts';
+import { MainLayout } from '../shared/layouts/index';
 import { ProtectedRoute } from '../shared/components/ProtectedRoute';
-import { ROUTES } from '../core/constants';
+import { ROUTES } from '../core/constants/index';
 import { UserRole } from '../core/constants/enums';
 
 // Pages

@@ -21,7 +21,7 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store';
 import { UserRole } from '../../core/constants/enums';
-import { ROUTES } from '../../core/constants';
+import { ROUTES } from '../../core/constants/index';
 import { Loading } from '../components/Loading';
 
 interface ProtectedRouteProps {
