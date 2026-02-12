@@ -79,8 +79,8 @@ async def create_product(
 
 @router.get("", response_model=List[ProductResponse])
 async def list_products(
-    available_only: bool = False,
-    product_service: Annotated[ProductService, Depends(get_product_service)]
+    product_service: Annotated[ProductService, Depends(get_product_service)],
+    available_only: bool = False
 ):
     """
     List all products

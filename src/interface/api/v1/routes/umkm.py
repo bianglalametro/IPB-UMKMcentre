@@ -73,8 +73,8 @@ async def create_umkm(
 
 @router.get("", response_model=List[UMKMResponse])
 async def list_umkms(
-    active_only: bool = False,
-    umkm_service: Annotated[UMKMService, Depends(get_umkm_service)]
+    umkm_service: Annotated[UMKMService, Depends(get_umkm_service)],
+    active_only: bool = False
 ):
     """
     List all UMKMs
