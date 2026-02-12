@@ -60,6 +60,12 @@ HOW TO EXTEND TO POSTGRESQL:
 This is the power of Clean Architecture and Dependency Inversion.
 """
 
+import sys
+import os
+
+# Add parent directory to path to support running from src/ directory
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -160,8 +166,10 @@ if __name__ == "__main__":
     
     # Run the application
     # In production, use gunicorn with uvicorn workers
+    # Determine the correct module path for reload
+    module_name = __spec__.name if __spec__ else "main"
     uvicorn.run(
-        "main:app",
+        f"{module_name}:app",
         host="0.0.0.0",
         port=8000,
         reload=True  # Set to False in production
