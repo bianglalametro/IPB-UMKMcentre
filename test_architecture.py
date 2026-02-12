@@ -7,7 +7,11 @@ It demonstrates how the layers work together.
 
 import asyncio
 import sys
-sys.path.insert(0, '/home/runner/work/IPB-UMKMcentre/IPB-UMKMcentre')
+from pathlib import Path
+
+# Add project root to path for imports
+project_root = Path(__file__).parent
+sys.path.insert(0, str(project_root))
 
 from src.domain.entities import User, UserRole, UMKM, Product, ProductCategory, Order, OrderItem, OrderStatus
 from src.infrastructure.persistence.in_memory_repositories import (

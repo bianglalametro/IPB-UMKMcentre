@@ -23,7 +23,9 @@ from passlib.context import CryptContext
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # JWT configuration
-SECRET_KEY = "your-secret-key-here-change-in-production"  # In production, use environment variable
+# SECURITY NOTE: In production, load these from environment variables
+# Example: SECRET_KEY = os.getenv("SECRET_KEY", "fallback-key-for-dev-only")
+SECRET_KEY = "your-secret-key-here-change-in-production"  # TODO: Use environment variable in production
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
