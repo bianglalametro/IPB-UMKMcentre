@@ -166,8 +166,10 @@ if __name__ == "__main__":
     
     # Run the application
     # In production, use gunicorn with uvicorn workers
+    # Determine the correct module path for reload
+    module_name = __spec__.name if __spec__ else "main"
     uvicorn.run(
-        "main:app",
+        f"{module_name}:app",
         host="0.0.0.0",
         port=8000,
         reload=True  # Set to False in production
