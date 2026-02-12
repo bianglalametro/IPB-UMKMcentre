@@ -60,6 +60,12 @@ HOW TO EXTEND TO POSTGRESQL:
 This is the power of Clean Architecture and Dependency Inversion.
 """
 
+import sys
+import os
+
+# Add parent directory to path to support running from src/ directory
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
